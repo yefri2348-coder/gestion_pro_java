@@ -11,6 +11,8 @@
     <meta charset="UTF-8">
     <title>Gestión Pro | Iniciar Sesión</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
         *{
@@ -98,13 +100,37 @@
 
     <div class="container">
         <h2>Gestión Pro</h2>
-       
+        
+      <%
+    String registro = request.getParameter("registro");
+    if ("ok".equals(registro)) {
+%>
+    <div id="mensajeExito" class="alert alert-success" style="margin-bottom:15px;">
+        Registro de usuario exitoso
+    </div>
+<%
+    }
+%>
+
+<%
+    String error = request.getParameter("error");
+    if ("1".equals(error)) {
+%>
+    <div id="mensajeError" style="margin-bottom:15px; background-color:#ff6b6b; color:white; padding:10px; border-radius:8px; text-align:center;">
+        ❌ Error de validación, inténtalo nuevamente
+    </div>
+<%
+    }
+%>
+
+
+
        <form action="LoginServlet" method="post">
 
             <div class="input-group">
                 <label>Correo electrónico</label>
                 <input type="email" name="correo" required>
-            </div>
+            </div> 
 
             <div class="input-group">
                 <label>Contraseña</label>
@@ -121,5 +147,19 @@
         </form>
     </div>
 
+<script>
+    setTimeout(function() {
+        var exito = document.getElementById("mensajeExito");
+        var error = document.getElementById("mensajeError");
+
+        if (exito) {
+            exito.style.display = "none";
+        }
+
+        if (error) {
+            error.style.display = "none";
+        }
+    }, 3000); // 3000 ms = 3 segundos
+</script>
 </body>
 </html>

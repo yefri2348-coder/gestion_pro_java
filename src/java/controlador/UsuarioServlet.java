@@ -5,9 +5,11 @@ import modelo.UsuarioDAO;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
+import jakarta.servlet.annotation.WebServlet;
 import java.io.IOException;
 import java.util.List;
 
+@WebServlet("/UsuarioServlet")  // 🔥 ESTA LÍNEA ES LA CLAVE
 public class UsuarioServlet extends HttpServlet {
 
     UsuarioDAO dao = new UsuarioDAO();

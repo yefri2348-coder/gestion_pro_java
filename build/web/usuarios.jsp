@@ -1,186 +1,127 @@
-<%@ page import="java.util.List" %>
-<%@ page import="modelo.Usuario" %>
+<%@page import="java.util.List"%>
+<%@page import="modelo.Usuario"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <%
     List<Usuario> lista = (List<Usuario>) request.getAttribute("usuarios");
 %>
 
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>Gestión Pro - Usuarios</title>
+    <meta charset="UTF-8">
+    <title>GestiÃ³n de Usuarios</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Iconos -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
     <style>
-        body{
-            margin:0;
-            font-family: Arial;
-            background:#f4f6f9;
+        body {
+            background: #f4f6f9;
         }
 
-        header{
-            background:#004aad;
-            color:white;
-            padding:15px;
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
+        .sidebar {
+            height: 100vh;
+            background: #1f2440;
+            color: white;
+            padding: 20px;
         }
 
-        header a{
-            color:white;
-            text-decoration:none;
-            font-weight:bold;
+        .sidebar a {
+            display: block;
+            color: #cfd8dc;
+            text-decoration: none;
+            margin: 15px 0;
         }
 
-        .container{
-            display:flex;
-        }
-
-        .sidebar{
-            width:220px;
-            background:#083c76;
-            height:100vh;
-            padding:20px;
-        }
-
-        .sidebar a{
-            display:block;
-            color:white;
-            text-decoration:none;
-            padding:10px;
-            margin:10px 0;
-            border-radius:5px;
-        }
-
-        .sidebar a:hover{
-            background:#0a68c2;
-        }
-
-        .content{
-            padding:30px;
-            flex:1;
-        }
-
-        .card{
-            background:white;
-            padding:25px;
-            border-radius:10px;
-            box-shadow:0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        table{
-            width:100%;
-            border-collapse: collapse;
-            margin-top:20px;
-        }
-
-        th, td{
-            padding:12px;
-            border-bottom:1px solid #ddd;
-            text-align:center;
-        }
-
-        th{
-            background:#004aad;
-            color:white;
-        }
-
-        .btn{
-            padding:6px 12px;
-            border-radius:5px;
-            text-decoration:none;
-            color:white;
-            font-size:13px;
-        }
-
-        .editar{
-            background:orange;
-        }
-
-        .eliminar{
-            background:red;
-        }
-
-        .nuevo{
-            background:green;
-            display:inline-block;
-            margin-bottom:15px;
-        }
-
-        .btn:hover{
-            opacity:0.85;
+        .sidebar a:hover {
+            color: white;
+            padding-left: 5px;
         }
     </style>
 </head>
 
 <body>
 
-<header>
-    <h2>Gestión Pro</h2>
-    <a href="dashboard.jsp">Volver al Dashboard</a>
-</header>
+<div class="container-fluid">
+    <div class="row">
 
-<div class="container">
+        <!-- SIDEBAR -->
+        <div class="col-md-3 col-lg-2 sidebar">
+            <h4>GestiÃ³n Pro</h4>
+            <hr>
 
-    <div class="sidebar">
-        <h3 style="color:white;">Menú</h3>
-        <a href="UsuarioServlet?accion=listar">Gestionar Usuarios</a>
-        <a href="#">Proyectos</a>
-        <a href="#">Tareas</a>
-        <a href="LogoutServlet">Cerrar Sesión</a>
-    </div>
+            <a href="dashboard.jsp"><i class="bi bi-speedometer2"></i> Dashboard</a>
+            <a href="UsuarioServlet?accion=listar"><i class="bi bi-people"></i> Usuarios</a>
+            <a href="#"><i class="bi bi-kanban"></i> Proyectos</a>
+            <a href="#"><i class="bi bi-list-task"></i> Tareas</a>
+            <a href="LogoutServlet"><i class="bi bi-box-arrow-right"></i> Cerrar sesiÃ³n</a>
+        </div>
 
-    <div class="content">
-        <div class="card">
+        <!-- CONTENIDO -->
+        <div class="col-md-9 col-lg-10 p-4">
 
-            <h2>Lista de Usuarios</h2>
+            <h3 class="mb-4">GestiÃ³n de Usuarios</h3>
 
-            <a class="btn nuevo" href="registro.jsp">Nuevo Usuario</a>
+            <!-- BOTÃ“N AGREGAR -->
+            <a href="registro.jsp" class="btn btn-success mb-3">
+                <i class="bi bi-person-plus"></i> Nuevo Usuario
+            </a>
 
-            <table>
-                <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Correo</th>
-                    <th>Acciones</th>
-                </tr>
+            <!-- TABLA -->
+            <div class="card shadow">
+                <div class="card-body">
 
-                <% if (lista != null && !lista.isEmpty()) {
-                    for (Usuario u : lista) { %>
+                    <table class="table table-striped table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Correo</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
 
-                <tr>
-                    <td><%= u.getId() %></td>
-                    <td><%= u.getNombre() %></td>
-                    <td><%= u.getCorreo() %></td>
-                    <td>
-                        <a class="btn editar" 
-                           href="UsuarioServlet?accion=editar&id=<%=u.getId()%>">
-                           Editar
-                        </a>
+                        <%
+                            if (lista != null) {
+                                for (Usuario u : lista) {
+                        %>
 
-                        <a class="btn eliminar" 
-                           href="UsuarioServlet?accion=eliminar&id=<%=u.getId()%>"
-                           onclick="return confirm('¿Seguro que deseas eliminar este usuario?')">
-                           Eliminar
-                        </a>
-                    </td>
-                </tr>
+                        <tr>
+                            <td><%= u.getId() %></td>
+                            <td><%= u.getNombre() %></td>
+                            <td><%= u.getCorreo() %></td>
+                            <td>
+                                <a href="UsuarioServlet?accion=editar&id=<%= u.getId() %>" class="btn btn-warning btn-sm">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
 
-                <%  } 
-                   } else { %>
+                                <a href="UsuarioServlet?accion=eliminar&id=<%= u.getId() %>" 
+                                   class="btn btn-danger btn-sm"
+                                   onclick="return confirm('Â¿Eliminar usuario?')">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
 
-                <tr>
-                    <td colspan="4">No hay usuarios registrados</td>
-                </tr>
+                        <%
+                                }
+                            }
+                        %>
 
-                <% } %>
+                        </tbody>
+                    </table>
 
-            </table>
+                </div>
+            </div>
 
         </div>
     </div>
-
 </div>
 
 </body>
 </html>
-
